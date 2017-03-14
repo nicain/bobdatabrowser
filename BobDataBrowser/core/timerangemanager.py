@@ -9,7 +9,6 @@ class TimeRangeManager(object):
         self.callback_list = []
 
     def set_time_range(self, time_range):
-        print time_range
         self.time_range = time_range
 
         for callback in self.callback_list:

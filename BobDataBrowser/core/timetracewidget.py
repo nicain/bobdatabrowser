@@ -21,15 +21,28 @@ class TimeTraceWidget(object):
         self.figure.add_layout(self.scrubber_bar)
 
         def start_change(attr, old, new):
+
+            self.app.time_index_slider.slider.start = int(new)
+            delta = self.app.time_index_slider.slider.end - self.app.time_index_slider.slider.start
+            self.app.time_index_slider.slider.step = max(int(1.*delta/300),1)
+
             if new > self.scrubber_bar.location:
                 self.scrubber_bar.location = self.figure.x_range.start + .01 * (self.figure.x_range.end - self.figure.x_range.start)
-                self.app.active_time_index_manager.set_active_time_index(self.scrubber_bar.location)
+                self.app.active_time_index_manager.set_active_time_index(int(self.scrubber_bar.location))
+
         self.figure.x_range.on_change('start', start_change)
 
         def end_change(attr, old, new):
+
+
+            self.app.time_index_slider.slider.end = int(new)
+            delta = self.app.time_index_slider.slider.end - self.app.time_index_slider.slider.start
+            print delta, 1. * delta / 500
+            self.app.time_index_slider.slider.step = max(int(1. * delta / 300), 1)
+
             if new < self.scrubber_bar.location:
                 self.scrubber_bar.location = self.figure.x_range.end - .01 * (self.figure.x_range.end - self.figure.x_range.start)
-                self.app.active_time_index_manager.set_active_time_index(self.scrubber_bar.location)
+                self.app.active_time_index_manager.set_active_time_index(int(self.scrubber_bar.location))
         self.figure.x_range.on_change('end', end_change)
 
 

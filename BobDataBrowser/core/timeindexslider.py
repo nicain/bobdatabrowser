@@ -6,8 +6,7 @@ class TimeIndexSlider(object):
 
         self.app = app
         self.slider = Slider(start=0, end=self.app.model.session.number_of_acquisition_frames,
-                             step=1,
-                             #  step=int(float(self.app.model.session.number_of_acquisition_frames/500)),
+                             step=int(1.*self.app.model.session.number_of_acquisition_frames/300),
                              title="Frame",
                              width=self.app.width)
 
