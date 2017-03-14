@@ -51,14 +51,12 @@ class DataBrowser(object):
         # Controller components:
         self.active_cell_manager = ActiveCellManager(app=self)
         self.active_time_index_manager = ActiveTimeIndexManager(app=self)
-        self.time_range_manager = TimeRangeManager(app=self)
 
         # View components:
         self.cell_mask_widget = CellMaskWidget(app=self)
         self.cell_slider = CellSlider(self)
         self.stimulus_widget = StimulusWidget(app=self)
         self.time_index_slider = TimeIndexSlider(self)
-        self.time_range_slider = TimeRangeSlider(self)
         self.time_trace_widget = TimeTraceWidget(self)
 
         self.initialize()
@@ -70,11 +68,6 @@ class DataBrowser(object):
         self.cell_slider.initialize()
         self.time_index_slider.initialize()
         self.time_trace_widget.initialize()
-        self.time_range_slider.initialize()
-
-        self.time_range_manager.register_time_range_change_callback(self.time_trace_widget.set_time_range)
-        self.time_range_manager.register_time_range_change_callback(self.time_range_slider.set_time_range)
-        self.time_range_manager.set_time_range((0, self.model.session.number_of_acquisition_frames))
 
         self.active_cell_manager.register_active_cell_change_callback(self.cell_mask_widget.set_active_cell)
         self.active_cell_manager.register_active_cell_change_callback(self.cell_slider.set_active_cell)
@@ -89,12 +82,7 @@ class DataBrowser(object):
 
     def get_layout(self):
 
-        # return layout([[self.time_index_slider.slider, self.cell_slider.slider],
-        #                [self.stimulus_widget.figure, self.cell_mask_widget.figure],
-        #                [self.time_trace_widget.figure],[self.time_range_slider.slider]])
-
         return layout([[self.time_index_slider.slider],
-                       [self.time_range_slider.slider],
                        [self.time_trace_widget.figure],
                        [self.cell_mask_widget.figure, self.stimulus_widget.figure],
                        [self.cell_slider.slider]])
