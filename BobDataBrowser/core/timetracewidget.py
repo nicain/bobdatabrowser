@@ -9,7 +9,7 @@ class TimeTraceWidget(object):
     def __init__(self, app):
 
         self.app = app
-        self.figure = Figure(plot_height=int(.3*self.app.width), plot_width=self.app.width, webgl=True, tools=['box_zoom', 'xwheel_zoom','xpan', 'ypan', 'save', 'reset'], active_drag='box_zoom')
+        self.figure = Figure(plot_height=int(.3*self.app.width), plot_width=self.app.width, webgl=True, tools=['box_zoom', 'xwheel_zoom', 'ywheel_zoom','xpan', 'save', 'reset', 'tap'], active_drag='box_zoom')
         self.trace_dict = {}
 
     def initialize(self):
@@ -27,25 +27,26 @@ class TimeTraceWidget(object):
             self.app.time_index_slider.slider.step = max(int(1.*delta/300),1)
 
             if new > self.scrubber_bar.location:
-                self.scrubber_bar.location = self.figure.x_range.start + .01 * (self.figure.x_range.end - self.figure.x_range.start)
-                self.app.active_time_index_manager.set_active_time_index(int(self.scrubber_bar.location))
+                new_location = self.figure.x_range.start + .01 * (self.figure.x_range.end - self.figure.x_range.start)
+                self.app.active_time_index_manager.set_active_time_index(int(new_location))
 
         self.figure.x_range.on_change('start', start_change)
 
         def end_change(attr, old, new):
 
-
             self.app.time_index_slider.slider.end = int(new)
             delta = self.app.time_index_slider.slider.end - self.app.time_index_slider.slider.start
-            print delta, 1. * delta / 500
             self.app.time_index_slider.slider.step = max(int(1. * delta / 300), 1)
 
             if new < self.scrubber_bar.location:
-                self.scrubber_bar.location = self.figure.x_range.end - .01 * (self.figure.x_range.end - self.figure.x_range.start)
-                self.app.active_time_index_manager.set_active_time_index(int(self.scrubber_bar.location))
+                new_location = self.figure.x_range.end - .01 * (self.figure.x_range.end - self.figure.x_range.start)
+                self.app.active_time_index_manager.set_active_time_index(int(new_location))
         self.figure.x_range.on_change('end', end_change)
 
-
+        def echo(attr, old, new):
+            self.app.active_time_index_manager.set_active_time_index(int(new[0]['x']))
+            # print new[0]['x'], new[0]['vx']
+        self.figure.tool_events.on_change('geometries', echo)
 
     def set_scrubber_bar_location(self, active_time_index_manager):
         self.scrubber_bar.location = active_time_index_manager.active_time_index
