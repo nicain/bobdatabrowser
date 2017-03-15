@@ -11,7 +11,7 @@ class CellSlider(object):
         self.slider = Slider(start=0,
                              end=self.app.model.session.number_of_cells-1,
                              step=1,
-                             width=20 * 16,
+                             width=self.app.cell_mask_widget.width,
                              title="Cell",
                              value=0,
                              callback_policy='mouseup',

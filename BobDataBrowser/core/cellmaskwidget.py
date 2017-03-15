@@ -22,9 +22,11 @@ class CellMaskWidget(object):
         tooltip_list.append(('(x,y)', '($x, $y)'))
         default_hovertool = HoverTool(tooltips=tooltip_list)
 
-        default_settings = {'x_range': [0, 512], 'y_range': [0, 512], 'plot_height': 20 * 16, 'plot_width': 20 * 16,
+        self.width = int(self.app.stimulus_widget.width*1./self.app.stimulus_widget.aspect_ratio)
+        self.height = self.width
+        default_settings = {'x_range': [0, 512], 'y_range': [0, 512], 'plot_height': self.height, 'plot_width': self.width,
                             'tools': ['pan','tap',BoxZoomTool(match_aspect=True),'box_select','crosshair','resize',ResetTool(reset_size=True), 'save',default_hovertool]}
-        self.figure = Figure(toolbar_location='below', **default_settings)
+        self.figure = Figure(toolbar_location='left', **default_settings)
         turn_off_axes_labels(self.figure)
         self.figure.toolbar.logo = None
 

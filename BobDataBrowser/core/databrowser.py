@@ -14,7 +14,7 @@ from bokeh.plotting import Figure
 from BobDataBrowser.core.utilities import turn_off_axes_labels
 from BobDataBrowser.core.timerangemanager import TimeRangeManager
 from BobDataBrowser.core.sessionnavigationwidget import SessionNavigationWidget
-from bokeh.layouts import widgetbox, layout
+from bokeh.layouts import widgetbox, layout, Row, Column, WidgetBox, Spacer
 from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
 import sys
 import time
@@ -76,9 +76,9 @@ class DataBrowser(object):
         self.active_time_index_manager = ActiveTimeIndexManager(app=self)
 
         # View components:
+        self.stimulus_widget = StimulusWidget(app=self)
         self.cell_mask_widget = CellMaskWidget(app=self)
         self.cell_slider = CellSlider(self)
-        self.stimulus_widget = StimulusWidget(app=self)
         self.time_index_slider = TimeIndexSlider(self)
         self.time_trace_widget = TimeTraceWidget(self)
         self.session_navigation_widget = SessionNavigationWidget(self)
@@ -118,7 +118,8 @@ class DataBrowser(object):
 
         p2 = DataTable(source=self.model.csid_column_data_source,
                        columns=columns,
-                       width=20*16, height=20*16,
+                       width=self.cell_mask_widget.width,
+                       height=self.cell_mask_widget.height,
                        sortable=True)
 
         # p2 = figure(plot_width=20*16, plot_height=20*16)
@@ -128,12 +129,28 @@ class DataBrowser(object):
 
         tabs = Tabs(tabs=[tab1, tab2])
 
-        return layout([[self.time_index_slider.slider],
-                       [self.session_navigation_widget.figure],
-                       [self.time_trace_widget.figure],
-                       [tabs, self.stimulus_widget.figure],
+        # return layout([
+        #                [Row(tabs, self.stimulus_widget.figure)]
+        #                # [Row(Column(tabs,self.cell_slider.slider), self.stimulus_widget.figure)]
+        #                # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
+        #                ])#, sizing_mode='stretch_both')
+
+        mask_stimulus_row = Row(Column(tabs, WidgetBox(self.cell_slider.slider)), Column(Spacer(height=60),self.stimulus_widget.figure))
+        return layout([
+                        [self.time_index_slider.slider],
+                        [self.session_navigation_widget.figure],
+                        [self.time_trace_widget.figure],
+                        [mask_stimulus_row]
+
+                       # [Row(Column(tabs,self.cell_slider.slider), self.stimulus_widget.figure)]
                        # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
-                       [self.cell_slider.slider]], sizing_mode='stretch_both')
+                       ])#, sizing_mode='stretch_both')
+
+        # return layout([
+        #                [Row(self.cell_mask_widget.figure, self.stimulus_widget.figure, sizing_mode='stretch_both')]
+        #                # [Row(Column(tabs,self.cell_slider.slider), self.stimulus_widget.figure)]
+        #                # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
+        #                ])#, sizing_mode='stretch_both')
 
 
 

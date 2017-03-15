@@ -18,11 +18,13 @@ class TimeTraceWidget(object):
         #     document.getElementsByName("cell_slider")[0].focus();
         #     """)
         tt = TapTool()
-        bzt = BoxZoomTool(dimensions='width')
+        # bzt = BoxZoomTool(dimensions='width')
 
-        self.figure = Figure(plot_height=int(.35*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'ywheel_zoom','xpan',bzt, 'save', 'reset', tt, ct], active_drag='xpan', active_scroll='xwheel_zoom')
+        self.figure = Figure(plot_height=int(.35*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'ywheel_zoom','xpan','box_zoom', 'save', 'reset', tt, ct], active_drag='box_zoom', active_scroll='xwheel_zoom')
         self.figure.toolbar.logo = None
         self.trace_dict = {}
+        bzt = self.figure.select(type=BoxZoomTool)
+        bzt.dimensions='width'
 
     def initialize(self):
         self.source = ColumnDataSource()
