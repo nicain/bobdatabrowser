@@ -59,13 +59,13 @@ class SessionNavigationWidget(object):
 
         self.stimulus_epoch_renderer_fg = self.figure.quad(
             alpha = 0,
-            selection_fill_alpha=1.,
+            selection_fill_alpha=.5,
             nonselection_fill_alpha=0,
             line_alpha=0,
-            selection_line_alpha=1.,
+            selection_line_alpha=.5,
             nonselection_line_alpha=0,
             name='foreground',
-            selection_color='firebrick',
+            selection_color='navy',
             **D)
 
         taptool = self.figure.select(type=TapTool)
@@ -74,10 +74,25 @@ class SessionNavigationWidget(object):
         self.scrubber_bar = Span(location=0, dimension='height', line_color='red', line_dash='dashed', line_width=1, name='scrubber')
         self.figure.add_layout(self.scrubber_bar)
 
+        def echo(attr, old, new):
+            # print attr, old, new
+            self.app.active_time_index_manager.set_active_time_index(int(new[0]['x']))
+            # print 'B', attr, new
+
+            # print new, new_range
+
+
+        self.figure.tool_events.on_change('geometries', echo)
 
         # taptool = self.figure.select(type=TapTool)
         def update(attr, old, new):
-            print attr, old, new
+            new_range = self.app.model.stimulus.interval_df.iloc[new['1d']['indices'][0]].interval
+            # print new_range, type(new_range)
+            new_start = int(new_range[1:-1].split(', ')[0])
+            new_end = int(new_range[1:-1].split(', ')[1])
+            self.app.time_trace_widget.figure.x_range.start = new_start
+            self.app.time_trace_widget.figure.x_range.end = new_end
+            # pass
             # new_index = new['1d']['indices'][0]
             # self.app.active_cell_manager.set_active_cell(new_index) #CAREFUL: new_index referes to row in ColumnDataSource, not cell_index
         self.stimulus_epoch_renderer_fg.data_source.on_change('selected', update)

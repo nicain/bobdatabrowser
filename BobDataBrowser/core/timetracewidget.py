@@ -4,6 +4,10 @@ from bokeh.models.sources import ColumnDataSource
 from bokeh.models import TapTool, OpenURL, Quad, BoxZoomTool, ResetTool
 from bokeh.models import CustomJS, ColumnDataSource, Slider, Span, PanTool
 
+# tmp = ResetTool()
+# print tmp.properties()
+# sys.exit()
+
 class TimeTraceWidget(object):
 
     def __init__(self, app):
@@ -46,6 +50,7 @@ class TimeTraceWidget(object):
         self.figure.x_range.on_change('end', end_change)
 
         def echo(attr, old, new):
+            print attr, old, new
             self.app.active_time_index_manager.set_active_time_index(int(new[0]['x']))
         self.figure.tool_events.on_change('geometries', echo)
 
