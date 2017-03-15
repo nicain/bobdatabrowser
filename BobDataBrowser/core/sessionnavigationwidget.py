@@ -19,7 +19,7 @@ class SessionNavigationWidget(object):
         ct = CrosshairTool(dimensions='height')
 
         # ct.
-        self.figure = Figure(plot_height=100,
+        self.figure = Figure(plot_height=70,
                              plot_width=self.app.width,
                              x_range=(0, self.app.model.stimulus.number_of_acquisition_frames),
                              y_range=(0,1), tools=[ht, ct], toolbar_location='above')
@@ -55,7 +55,7 @@ class SessionNavigationWidget(object):
                 curr_stimulus = si.SPONTANEOUS_ACTIVITY
 
             color_list = list(color_dict[curr_stimulus])
-            color_list.append(.8)
+            color_list.append(1.)
             D['color'].append(RGB(*tuple(color_list)))
 
 

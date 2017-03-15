@@ -103,9 +103,9 @@ class DataBrowser(object):
 
     def get_layout(self):
 
-        return layout([
+        return layout([[self.time_index_slider.slider],
                        [self.session_navigation_widget.figure],
-            [self.time_index_slider.slider],
+
                        [self.time_trace_widget.figure],
                        [self.cell_mask_widget.figure, self.stimulus_widget.figure],
                        [self.cell_slider.slider]])
