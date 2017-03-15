@@ -20,7 +20,7 @@ class SessionNavigationWidget(object):
         self.figure = Figure(plot_height=70,
                              plot_width=self.app.width,
                              x_range=(0, self.app.model.stimulus.number_of_acquisition_frames),
-                             y_range=(0,1), tools=[ht, ct], toolbar_location='above')
+                             y_range=(0,1), tools=[tt, ht, ct, 'reset'], toolbar_location='above')
         turn_off_axes_labels(self.figure)
         self.figure.xgrid.grid_line_color = None
         self.figure.ygrid.grid_line_color = None
@@ -40,17 +40,42 @@ class SessionNavigationWidget(object):
             curr_stimulus = row.stimulus
             if row.stimulus == 'gap':
                 curr_stimulus = si.SPONTANEOUS_ACTIVITY
-
             color_list = list(color_dict[curr_stimulus])
-            color_list.append(1.)
             D['color'].append(RGB(*tuple(color_list)))
 
+        self.stimulus_epoch_renderer_bg = self.figure.quad(
+            alpha = 1.,
+            name='background',
+            **D)
 
-        self.stimulus_epoch_renderer = self.figure.quad(**D)
+        D = collections.defaultdict(list)
+        for _, row in self.app.model.stimulus.interval_df.iterrows():
+            left = int(row.interval[1:-1].split(', ')[0])
+            right = int(row.interval[1:-1].split(', ')[1])
+            D['left'].append(left)
+            D['right'].append(right)
+            D['bottom'].append(0)
+            D['top'].append(1)
+
+        self.stimulus_epoch_renderer_fg = self.figure.quad(
+            alpha = 0,
+            selection_fill_alpha=1.,
+            nonselection_fill_alpha=0,
+            line_alpha=0,
+            selection_line_alpha=1.,
+            nonselection_line_alpha=0,
+            name='foreground',
+            selection_color='firebrick',
+            **D)
+
+
 
         taptool = self.figure.select(type=TapTool)
+        taptool.names = ['foreground']
+
+        # taptool = self.figure.select(type=TapTool)
         def update(attr, old, new):
             print attr, old, new
             # new_index = new['1d']['indices'][0]
             # self.app.active_cell_manager.set_active_cell(new_index) #CAREFUL: new_index referes to row in ColumnDataSource, not cell_index
-        self.stimulus_epoch_renderer.data_source.on_change('selected', update)
+        self.stimulus_epoch_renderer_fg.data_source.on_change('selected', update)
