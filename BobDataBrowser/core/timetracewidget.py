@@ -64,24 +64,41 @@ class TimeTraceWidget(object):
 
         self.figure.tool_events.on_change('geometries', echo)
 
+        def callback(attr, old, new):
+            cell_index = new['1d']['indices'][0]
+
+             # = active_cell_manager.active_cell
+
+            if not cell_index in self.trace_dict:
+                self.trace_dict[cell_index] = self.app.model.session.get_dff_array(self.app.model.session.data,
+                                                                                   self.app.oeid)[cell_index, :]
+
+            y = self.trace_dict[cell_index]  # [self.ti0:self.tif]
+            x = range(len(y))
+
+            self.source.data = {'x': x, 'y': y}
+
+
+        self.app.model.csid_column_data_source.on_change('selected', callback)
+
 
 
     def set_scrubber_bar_location(self, active_time_index_manager):
         self.scrubber_bar.location = active_time_index_manager.active_time_index
 
-    def set_active_cell(self, active_cell_manager):
-
-
-
-        cell_index = active_cell_manager.active_cell
-
-        if not cell_index in self.trace_dict:
-            self.trace_dict[cell_index] = self.app.model.session.get_dff_array(self.app.model.session.data, self.app.oeid)[cell_index, :]
-
-        y = self.trace_dict[cell_index]#[self.ti0:self.tif]
-        x = range(len(y))
-
-        self.source.data = {'x':x, 'y':y}
+    # def set_active_cell(self, active_cell_manager):
+    #
+    #
+    #
+    #     cell_index = active_cell_manager.active_cell
+    #
+    #     if not cell_index in self.trace_dict:
+    #         self.trace_dict[cell_index] = self.app.model.session.get_dff_array(self.app.model.session.data, self.app.oeid)[cell_index, :]
+    #
+    #     y = self.trace_dict[cell_index]#[self.ti0:self.tif]
+    #     x = range(len(y))
+    #
+    #     self.source.data = {'x':x, 'y':y}
 
 
 
