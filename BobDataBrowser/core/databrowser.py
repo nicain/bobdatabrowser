@@ -133,7 +133,7 @@ class DataBrowser(object):
                        [self.time_trace_widget.figure],
                        [tabs, self.stimulus_widget.figure],
                        # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
-                       [self.cell_slider.slider]])
+                       [self.cell_slider.slider]], sizing_mode='stretch_both')
 
 
 
