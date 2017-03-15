@@ -5,6 +5,7 @@ from BobDataBrowser.core.activetimeindexmanager import ActiveTimeIndexManager
 from BobDataBrowser.core.cellmaskwidget import CellMaskWidget
 from BobDataBrowser.core.cellslider import CellSlider
 import collections
+from bokeh.models import CustomJS
 from BobDataBrowser.core.stimuluswidget import StimulusWidget
 from bokeh.models.sources import ColumnDataSource
 from BobDataBrowser.core.timeindexslider import TimeIndexSlider
@@ -122,10 +123,26 @@ class DataBrowser(object):
                        height=self.cell_mask_widget.height,
                        sortable=True)
 
-        def tmp(attr, old, new):
-            print attr, old, new
+        # p2.js_on_change()
 
-        self.model.csid_column_data_source.on_change('selected', tmp)
+        callback = CustomJS(args=dict(dt=p2), code="""
+                dt.trigger('change');
+            """)
+
+        self.model.csid_column_data_source.js_on_change('change', callback)
+
+
+
+        # def set_active_cell(active_cell_manager):
+        #     print active_cell_manager.active_cell
+        #     print p2.source.selected['1d']['indices']
+        #     # print old['1d']['indices']
+        #     # print new['1d']['indices']
+        #     print
+        #     p2.source.trigger('selected', None, p2.source.selected)
+        # self.active_cell_manager.register_active_cell_change_callback(set_active_cell)
+
+        # self.model.csid_column_data_source.on_change('selected', tmp)
 
 
         # p2 = figure(plot_width=20*16, plot_height=20*16)

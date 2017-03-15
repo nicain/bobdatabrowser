@@ -10,7 +10,6 @@ class ActiveTimeIndexManager(object):
 
     def set_active_time_index(self, active_time_index):
         self.active_time_index = active_time_index
-        print active_time_index
         for callback in self.callback_list:
             callback(self)
 
