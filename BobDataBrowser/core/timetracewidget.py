@@ -2,7 +2,7 @@ from bokeh.plotting import Figure
 from bokeh.models import Line
 from bokeh.models.sources import ColumnDataSource
 from bokeh.models import TapTool, OpenURL, Quad, BoxZoomTool, ResetTool
-from bokeh.models import CustomJS, ColumnDataSource, Slider, Span, PanTool
+from bokeh.models import CustomJS, ColumnDataSource, Slider, Span, PanTool, CrosshairTool
 
 # tmp = ResetTool()
 # print tmp.properties()
@@ -12,8 +12,10 @@ class TimeTraceWidget(object):
 
     def __init__(self, app):
 
+        ct = CrosshairTool(dimensions='height')
         self.app = app
-        self.figure = Figure(plot_height=int(.3*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'ywheel_zoom','xpan','box_zoom', 'save', 'reset', 'tap'], active_drag='xpan', active_scroll='xwheel_zoom')
+        self.figure = Figure(plot_height=int(.3*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'ywheel_zoom','xpan','box_zoom', 'save', 'reset', 'tap', ct], active_drag='xpan', active_scroll='xwheel_zoom')
+        self.figure.toolbar.logo = None
         self.trace_dict = {}
 
     def initialize(self):

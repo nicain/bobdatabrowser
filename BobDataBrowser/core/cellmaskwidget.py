@@ -24,8 +24,10 @@ class CellMaskWidget(object):
 
         default_settings = {'x_range': [0, 512], 'y_range': [0, 512], 'plot_height': 20 * 16, 'plot_width': 20 * 16,
                             'tools': ['pan','tap',BoxZoomTool(match_aspect=True),'box_select','crosshair','resize',ResetTool(reset_size=True), 'save',default_hovertool]}
-        self.figure = Figure(**default_settings)
+        self.figure = Figure(toolbar_location='below', **default_settings)
         turn_off_axes_labels(self.figure)
+        self.figure.toolbar.logo = None
+
 
 
 
