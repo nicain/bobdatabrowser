@@ -30,6 +30,8 @@ class CellMaskWidget(object):
         turn_off_axes_labels(self.figure)
         self.figure.toolbar.logo = None
 
+        self.figure.x_range.bounds = (0,512)
+        self.figure.y_range.bounds = (0, 512)
 
 
 
