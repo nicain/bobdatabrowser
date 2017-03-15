@@ -71,6 +71,8 @@ class TimeTraceWidget(object):
 
     def set_active_cell(self, active_cell_manager):
 
+
+
         cell_index = active_cell_manager.active_cell
 
         if not cell_index in self.trace_dict:
