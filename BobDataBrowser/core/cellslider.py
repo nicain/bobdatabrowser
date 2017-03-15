@@ -30,6 +30,12 @@ class CellSlider(object):
 
         self.source.on_change('data', update_plot_data)
 
-    def set_active_cell(self, active_cell_manager):
+        def callback(attr, old, new):
+            self.slider.value = new['1d']['indices'][0]
 
-        self.slider.value = active_cell_manager.active_cell
+        self.model.csid_column_data_source.on_change('selected', callback)
+
+
+    # def set_active_cell(self, active_cell_manager):
+    #
+    #     self.slider.value = active_cell_manager.active_cell

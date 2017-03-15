@@ -98,7 +98,7 @@ class DataBrowser(object):
         # sys.exit()
 
         self.active_cell_manager.register_active_cell_change_callback(self.cell_mask_widget.set_active_cell)
-        self.active_cell_manager.register_active_cell_change_callback(self.cell_slider.set_active_cell)
+        # self.active_cell_manager.register_active_cell_change_callback(self.cell_slider.set_active_cell)
         self.active_cell_manager.register_active_cell_change_callback(self.time_trace_widget.set_active_cell)
         self.active_cell_manager.set_active_cell(0)
 
