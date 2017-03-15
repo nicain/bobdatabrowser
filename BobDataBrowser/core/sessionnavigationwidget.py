@@ -2,7 +2,7 @@ from bokeh.plotting import Figure
 from BobDataBrowser.core.utilities import turn_off_axes_labels, color_dict
 import collections
 import allensdk.brain_observatory.stimulus_info as si
-from bokeh.models import CustomJS, ColumnDataSource, Slider, Span, PanTool, CrosshairTool, HoverTool, TapTool
+from bokeh.models import CustomJS, ColumnDataSource, Slider, Span, PanTool, CrosshairTool, HoverTool, TapTool, ResetTool
 from bokeh.colors import RGB
 import sys
 
@@ -16,11 +16,13 @@ class SessionNavigationWidget(object):
         ct = CrosshairTool(dimensions='height')
         tt = TapTool()
 
+        rs = self.app.time_trace_widget.figure.select(type=ResetTool)
+
         # ct.
         self.figure = Figure(plot_height=70,
                              plot_width=self.app.width,
                              x_range=(0, self.app.model.stimulus.number_of_acquisition_frames),
-                             y_range=(0,1), tools=[tt, ht, ct, 'reset'], toolbar_location='above')
+                             y_range=(0,1), tools=[tt, ht, ct, rs], toolbar_location='above')
         turn_off_axes_labels(self.figure)
         self.figure.xgrid.grid_line_color = None
         self.figure.ygrid.grid_line_color = None
