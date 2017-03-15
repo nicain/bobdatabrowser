@@ -68,10 +68,12 @@ class SessionNavigationWidget(object):
             selection_color='firebrick',
             **D)
 
-
-
         taptool = self.figure.select(type=TapTool)
         taptool.names = ['foreground']
+
+        self.scrubber_bar = Span(location=0, dimension='height', line_color='red', line_dash='dashed', line_width=1, name='scrubber')
+        self.figure.add_layout(self.scrubber_bar)
+
 
         # taptool = self.figure.select(type=TapTool)
         def update(attr, old, new):
@@ -79,3 +81,6 @@ class SessionNavigationWidget(object):
             # new_index = new['1d']['indices'][0]
             # self.app.active_cell_manager.set_active_cell(new_index) #CAREFUL: new_index referes to row in ColumnDataSource, not cell_index
         self.stimulus_epoch_renderer_fg.data_source.on_change('selected', update)
+
+    def set_scrubber_bar_location(self, active_time_index_manager):
+        self.scrubber_bar.location = active_time_index_manager.active_time_index

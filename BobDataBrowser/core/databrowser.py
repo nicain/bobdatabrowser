@@ -99,6 +99,7 @@ class DataBrowser(object):
         self.active_time_index_manager.register_active_time_index_change_callback(self.stimulus_widget.set_active_time_index)
         self.active_time_index_manager.register_active_time_index_change_callback(self.time_index_slider.set_active_time_index)
         self.active_time_index_manager.register_active_time_index_change_callback(self.time_trace_widget.set_scrubber_bar_location)
+        self.active_time_index_manager.register_active_time_index_change_callback(self.session_navigation_widget.set_scrubber_bar_location)
         self.active_time_index_manager.set_active_time_index(0)
 
     def get_layout(self):
