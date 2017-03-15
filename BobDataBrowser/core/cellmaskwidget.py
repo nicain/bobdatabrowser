@@ -3,16 +3,13 @@ from bokeh.models import HoverTool
 from BobAnalysis.core.roi import ROI
 from bokeh.models.sources import ColumnDataSource
 from bokeh.models import TapTool, OpenURL, Quad, BoxZoomTool, ResetTool
+from BobDataBrowser.core.utilities import turn_off_axes_labels
 import numpy as np
 from bokeh.models.callbacks import Callback
 import collections
 import time
 import pandas as pd
 from bokeh.models import CustomJS
-
-tmp = HoverTool()
-for x in tmp.properties():
-    print x
 
 class CellMaskWidget(object):
 
@@ -28,12 +25,9 @@ class CellMaskWidget(object):
         default_settings = {'x_range': [0, 512], 'y_range': [0, 512], 'plot_height': 20 * 16, 'plot_width': 20 * 16,
                             'tools': ['pan','tap',BoxZoomTool(match_aspect=True),'box_select','crosshair','resize',ResetTool(reset_size=True), 'save',default_hovertool]}
         self.figure = Figure(**default_settings)
-        self.figure.xaxis.major_tick_line_color = None  # turn off x-axis major ticks
-        self.figure.xaxis.minor_tick_line_color = None  # turn off x-axis minor ticks
-        self.figure.yaxis.major_tick_line_color = None  # turn off y-axis major ticks
-        self.figure.yaxis.minor_tick_line_color = None  # turn off y-axis minor ticks
-        self.figure.xaxis.major_label_text_font_size = '0pt'  # note that this leaves space between the axis and the axis label
-        self.figure.yaxis.major_label_text_font_size = '0pt'
+        turn_off_axes_labels(self.figure)
+
+
 
     def initialize(self):
         self.set_image(ROI.get_roi_mask_array(self.app.model.session.data, self.app.oeid).sum(axis=0))

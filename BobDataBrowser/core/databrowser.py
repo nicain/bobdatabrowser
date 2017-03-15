@@ -10,7 +10,10 @@ from bokeh.models.sources import ColumnDataSource
 from BobDataBrowser.core.timeindexslider import TimeIndexSlider
 from BobDataBrowser.core.timetracewidget import TimeTraceWidget
 from BobDataBrowser.core.timerangeslider import TimeRangeSlider
+from bokeh.plotting import Figure
+from BobDataBrowser.core.utilities import turn_off_axes_labels
 from BobDataBrowser.core.timerangemanager import TimeRangeManager
+from BobDataBrowser.core.sessionnavigationwidget import SessionNavigationWidget
 from bokeh.layouts import widgetbox, layout
 import sys
 import time
@@ -73,6 +76,7 @@ class DataBrowser(object):
         self.stimulus_widget = StimulusWidget(app=self)
         self.time_index_slider = TimeIndexSlider(self)
         self.time_trace_widget = TimeTraceWidget(self)
+        self.session_navigation_widget = SessionNavigationWidget(self)
 
         self.initialize()
 
@@ -80,10 +84,12 @@ class DataBrowser(object):
 
         self.cell_mask_widget.initialize()
         self.stimulus_widget.initialize()
-
         self.cell_slider.initialize()
         self.time_index_slider.initialize()
         self.time_trace_widget.initialize()
+        self.session_navigation_widget.initialize()
+
+        # sys.exit()
 
         self.active_cell_manager.register_active_cell_change_callback(self.cell_mask_widget.set_active_cell)
         self.active_cell_manager.register_active_cell_change_callback(self.cell_slider.set_active_cell)
@@ -95,14 +101,11 @@ class DataBrowser(object):
         self.active_time_index_manager.register_active_time_index_change_callback(self.time_trace_widget.set_scrubber_bar_location)
         self.active_time_index_manager.set_active_time_index(0)
 
-
-
-
-
-
     def get_layout(self):
 
-        return layout([[self.time_index_slider.slider],
+        return layout([
+                       [self.session_navigation_widget.figure],
+            [self.time_index_slider.slider],
                        [self.time_trace_widget.figure],
                        [self.cell_mask_widget.figure, self.stimulus_widget.figure],
                        [self.cell_slider.slider]])
