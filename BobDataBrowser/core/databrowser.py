@@ -15,6 +15,7 @@ from bokeh.plotting import Figure
 from BobDataBrowser.core.utilities import turn_off_axes_labels
 from BobDataBrowser.core.timerangemanager import TimeRangeManager
 from BobDataBrowser.core.sessionnavigationwidget import SessionNavigationWidget
+from BobDataBrowser.core.celltablewidget import CellTableWidget
 from bokeh.layouts import widgetbox, layout, Row, Column, WidgetBox, Spacer
 from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
 import sys
@@ -83,6 +84,7 @@ class DataBrowser(object):
         self.time_index_slider = TimeIndexSlider(self)
         self.time_trace_widget = TimeTraceWidget(self)
         self.session_navigation_widget = SessionNavigationWidget(self)
+        self.cell_table_widget = CellTableWidget(self)
 
         self.initialize()
 
@@ -94,88 +96,30 @@ class DataBrowser(object):
         self.time_index_slider.initialize()
         self.time_trace_widget.initialize()
         self.session_navigation_widget.initialize()
-
-        # sys.exit()
+        self.cell_table_widget.initialize()
 
         self.active_cell_manager.register_active_cell_change_callback(self.cell_mask_widget.set_active_cell)
-        # self.active_cell_manager.register_active_cell_change_callback(self.cell_slider.set_active_cell)
-        # self.active_cell_manager.register_active_cell_change_callback(self.time_trace_widget.set_active_cell)
         self.active_cell_manager.set_active_cell(0)
 
+        self.active_time_index_manager.register_active_time_index_change_callback(self.time_trace_widget.set_scrubber_bar_location)
         self.active_time_index_manager.register_active_time_index_change_callback(self.stimulus_widget.set_active_time_index)
         self.active_time_index_manager.register_active_time_index_change_callback(self.time_index_slider.set_active_time_index)
-        self.active_time_index_manager.register_active_time_index_change_callback(self.time_trace_widget.set_scrubber_bar_location)
         self.active_time_index_manager.register_active_time_index_change_callback(self.session_navigation_widget.set_scrubber_bar_location)
         self.active_time_index_manager.set_active_time_index(0)
 
     def get_layout(self):
 
-        columns = [
-                    TableColumn(field='csid', title='csid'),
-                    TableColumn(field='cell_index', title='cell_index'),
-                    TableColumn(field='size', title='size')
-                  ]
-
-
-        p2 = DataTable(source=self.model.csid_column_data_source,
-                       columns=columns,
-                       width=self.cell_mask_widget.width,
-                       height=self.cell_mask_widget.height,
-                       sortable=True)
-
-        # p2.js_on_change()
-
-        callback = CustomJS(args=dict(dt=p2), code="""
-                dt.trigger('change');
-            """)
-
-        self.model.csid_column_data_source.js_on_change('change', callback)
-
-
-
-        # def set_active_cell(active_cell_manager):
-        #     print active_cell_manager.active_cell
-        #     print p2.source.selected['1d']['indices']
-        #     # print old['1d']['indices']
-        #     # print new['1d']['indices']
-        #     print
-        #     p2.source.trigger('selected', None, p2.source.selected)
-        # self.active_cell_manager.register_active_cell_change_callback(set_active_cell)
-
-        # self.model.csid_column_data_source.on_change('selected', tmp)
-
-
-        # p2 = figure(plot_width=20*16, plot_height=20*16)
-        # p2.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=3, color="navy", alpha=0.5)
         tab1 = Panel(child=Column(self.cell_mask_widget.figure, WidgetBox(self.cell_slider.slider)), title="mask")
-        tab2 = Panel(child=p2, title="line")
+        tab2 = Panel(child=self.cell_table_widget.figure, title="line")
         tabs = Tabs(tabs=[tab1, tab2])
 
-        # return layout([
-        #                [Row(tabs, self.stimulus_widget.figure)]
-        #                # [Row(Column(tabs,self.cell_slider.slider), self.stimulus_widget.figure)]
-        #                # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
-        #                ])#, sizing_mode='stretch_both')
-
         mask_stimulus_row = Row(tabs, Column(Spacer(height=60),self.stimulus_widget.figure))
-        # mask_stimulus_row = Row(Column(tabs, WidgetBox(self.cell_slider.slider)), Column(Spacer(height=60),self.stimulus_widget.figure))
+
         return layout([
                         [self.time_index_slider.slider],
                         [self.session_navigation_widget.figure],
                         [self.time_trace_widget.figure],
-                        [mask_stimulus_row]
-
-                       # [Row(Column(tabs,self.cell_slider.slider), self.stimulus_widget.figure)]
-                       # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
-                       ])#, sizing_mode='stretch_both')
-
-        # return layout([
-        #                [Row(self.cell_mask_widget.figure, self.stimulus_widget.figure, sizing_mode='stretch_both')]
-        #                # [Row(Column(tabs,self.cell_slider.slider), self.stimulus_widget.figure)]
-        #                # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
-        #                ])#, sizing_mode='stretch_both')
-
-
+                        [mask_stimulus_row]])
 
 if __name__ == "__main__":
 
