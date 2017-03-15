@@ -122,11 +122,16 @@ class DataBrowser(object):
                        height=self.cell_mask_widget.height,
                        sortable=True)
 
+        def tmp(attr, old, new):
+            print attr, old, new
+
+        self.model.csid_column_data_source.on_change('selected', tmp)
+
+
         # p2 = figure(plot_width=20*16, plot_height=20*16)
         # p2.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=3, color="navy", alpha=0.5)
         tab1 = Panel(child=Column(self.cell_mask_widget.figure, WidgetBox(self.cell_slider.slider)), title="mask")
         tab2 = Panel(child=p2, title="line")
-
         tabs = Tabs(tabs=[tab1, tab2])
 
         # return layout([
