@@ -15,10 +15,12 @@ class TimeTraceWidget(object):
     def initialize(self):
         self.source = ColumnDataSource()
         self.line = self.figure.line(x='x', y='y', line_width=2, source=self.source)
-        # self.ti0, self.tif = None, None
 
         self.scrubber_bar = Span(location=0, dimension='height', line_color='red', line_dash='dashed', line_width=3, name='scrubber')
         self.figure.add_layout(self.scrubber_bar)
+        self.figure.x_range.start = 0
+        self.figure.x_range.end = self.app.model.stimulus.number_of_acquisition_frames
+        self.figure.x_range.bounds = (self.figure.x_range.start-1, self.figure.x_range.end+1)
 
         def start_change(attr, old, new):
 
@@ -45,7 +47,6 @@ class TimeTraceWidget(object):
 
         def echo(attr, old, new):
             self.app.active_time_index_manager.set_active_time_index(int(new[0]['x']))
-            # print new[0]['x'], new[0]['vx']
         self.figure.tool_events.on_change('geometries', echo)
 
     def set_scrubber_bar_location(self, active_time_index_manager):
@@ -55,15 +56,9 @@ class TimeTraceWidget(object):
 
         cell_index = active_cell_manager.active_cell
 
-
-
-
         if not cell_index in self.trace_dict:
             self.trace_dict[cell_index] = self.app.model.session.get_dff_array(self.app.model.session.data, self.app.oeid)[cell_index, :]
 
-        # if self.tif - self.ti0 > 10000:
-        #     y = self.trace_dict[cell_index]#[self.ti0:self.tif]
-        # else:
         y = self.trace_dict[cell_index]#[self.ti0:self.tif]
         x = range(len(y))
 

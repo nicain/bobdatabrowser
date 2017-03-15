@@ -36,6 +36,8 @@ class Model(object):
                 D[label].append(value)
             D['csid'].append(curr_roi.csid)
             D['center'].append(curr_roi.center)
+            D['cx'].append(curr_roi.center[0])
+            D['cy'].append(curr_roi.center[1])
             D['size'].append(curr_roi.size)
             D['cell_index'].append(curr_roi.cell_index)
 
@@ -48,10 +50,6 @@ class Model(object):
 
         D['xs'] = ll_x
         D['ys'] = ll_y
-
-        # for key, val in D.iteritems():
-        #     print key, len(val)
-        # sys.exit()
 
         self.csid_column_data_source = ColumnDataSource(D)
 
@@ -83,53 +81,6 @@ class DataBrowser(object):
         self.cell_mask_widget.initialize()
         self.stimulus_widget.initialize()
 
-        # ll_x = []
-        # ll_y = []
-        # t0 = time.time()
-        # for ii in range(self.model.session.number_of_cells):
-        # for ii in range(2):
-        #
-        #     print ii
-            # t0 = time.time()
-            # self.active_cell_manager.set_active_cell(ii)
-
-
-
-            # t0 = time.time()
-            # x_list, y_list = self.model.session.get_roi(self.model.session.data, ii).get_x_y_border_list()
-            # ll_x.append(x_list)
-            # ll_y.append(y_list)
-            # print 'A', time.time() - t0
-            # t0 = time.time()
-            # df = pd.DataFrame({'x': x_list, 'y': y_list})
-            # print 'B', time.time() - t0
-            # t0 = time.time()
-            # source = ColumnDataSource(data=df)
-            # print 'C', time.time() - t0
-            # t0 = time.time()
-            # self.cell_mask_widget.selected_cell_glyph_dict[ii] = self.cell_mask_widget.figure.patch(x=x_list, y=y_list)
-            # print 'D', time.time() - t0
-
-            # self.cell_mask_widget.figure.patch(x=x_list, y=y_list)
-            # print 'D2', time.time() - t0
-            #
-            #
-            #
-            # print
-        # print 'cumulative', time.time() - t0
-        # t0 = time.time()
-        # tmp = self.cell_mask_widget.figure.patches(ll_x, ll_y, name=['hi']*len(ll_y), color=['navy', 'navy'])
-        # # tmp.
-        # print type(tmp), tmp.glyph
-        # print 'all', time.time() - t0
-        # for x in tmp.glyph.properties():
-        #     print x
-
-        # sys.exit()
-
-
-
-
         self.cell_slider.initialize()
         self.time_index_slider.initialize()
         self.time_trace_widget.initialize()
@@ -137,11 +88,7 @@ class DataBrowser(object):
         self.active_cell_manager.register_active_cell_change_callback(self.cell_mask_widget.set_active_cell)
         self.active_cell_manager.register_active_cell_change_callback(self.cell_slider.set_active_cell)
         self.active_cell_manager.register_active_cell_change_callback(self.time_trace_widget.set_active_cell)
-        print 'setting cell zero'
         self.active_cell_manager.set_active_cell(0)
-
-
-
 
         self.active_time_index_manager.register_active_time_index_change_callback(self.stimulus_widget.set_active_time_index)
         self.active_time_index_manager.register_active_time_index_change_callback(self.time_index_slider.set_active_time_index)

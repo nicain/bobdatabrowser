@@ -9,7 +9,7 @@ class CellSlider(object):
 
         self.app = app
         self.slider = Slider(start=0,
-                             end=self.app.model.session.number_of_cells,
+                             end=self.app.model.session.number_of_cells-1,
                              step=1,
                              width=20 * 16,
                              title="Cell",
@@ -24,7 +24,6 @@ class CellSlider(object):
             self.app.active_cell_manager.set_active_cell(self.slider.value)
 
         self.source = ColumnDataSource(data=dict(value=[]))
-        # source.on_change('data', cb)
 
         self.slider.callback = CustomJS(args=dict(source=self.source), code="""
                                                                        source.data = { value: [cb_obj.value] }

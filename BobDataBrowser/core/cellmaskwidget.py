@@ -10,7 +10,9 @@ import time
 import pandas as pd
 from bokeh.models import CustomJS
 
-
+tmp = HoverTool()
+for x in tmp.properties():
+    print x
 
 class CellMaskWidget(object):
 
@@ -36,7 +38,6 @@ class CellMaskWidget(object):
     def initialize(self):
         self.set_image(ROI.get_roi_mask_array(self.app.model.session.data, self.app.oeid).sum(axis=0))
         self.set_roi_glyphs(self.app.model.csid_column_data_source)
-        # self.selected_cell_glyph_dict = {}
         self.active_cell = None
 
     def set_active_cell_manager(self, active_cell_manager):
@@ -64,13 +65,7 @@ class CellMaskWidget(object):
         self.roi_glyph_renderer.data_source.on_change('selected', update)
 
     def set_active_cell(self, active_cell_manager):
-        # print self.roi_glyph_renderer.data_source.selected
-        # print self.roi_glyph_renderer.data_source.selected['1d']
-        # print self.roi_glyph_renderer.data_source.selected['1d']['indices']
-        # print self.roi_glyph_renderer.data_source.selected['1d']['indices'][0]
 
-        # if len(self.roi_glyph_renderer.data_source.selected['1d']['indices']) = 0:
-        # print self.roi_glyph_renderer.data_source.selected['1d']['indices']
         if len(self.roi_glyph_renderer.data_source.selected['1d']['indices']) == 1 and active_cell_manager.active_cell != self.roi_glyph_renderer.data_source.selected['1d']['indices'][0]:
             self.roi_glyph_renderer.data_source.selected['1d']['indices'][0] = active_cell_manager.active_cell
             self.roi_glyph_renderer.data_source.trigger('selected', None, self.roi_glyph_renderer.data_source.selected)
@@ -78,119 +73,7 @@ class CellMaskWidget(object):
         elif len(self.roi_glyph_renderer.data_source.selected['1d']['indices']) == 0:
             self.roi_glyph_renderer.data_source.selected['1d']['indices'] = [active_cell_manager.active_cell]
             self.roi_glyph_renderer.data_source.trigger('selected', None, self.roi_glyph_renderer.data_source.selected)
-        # else:
-        #     raise Exception
 
-
-
-        # self.roi_glyph_renderer.data_source.selected = cell_index
-
-        # alpha_list = [0.]*self.app.model.session.number_of_cells
-        # alpha_list[cell_index] = 1.
-
-        # color_dict = {}
-        # for ii in range(self.app.model.session.number_of_cells):
-        #     color_dict[ii]= 'navy'
-
-        # color_dict[cell_index] = 'firebrick'
-        # alpha_list = ['navy']*self.app.model.session.number_of_cells
-        # alpha_list[cell_index] = 'firebrick'
-
-        # self.patches_render.glyph.fill_color = color_dict
-        # if not self.active_cell is None:
-        #     self.active_cell.visible = False
-
-        # self.active_cell = self.selected_cell_glyph_dict[cell_index]
-        # self.active_cell.visible = True
-
-        # if not cell_index in self.selected_cell_glyph_dict:
-        #     t0 = time.time()
-        #     x_list, y_list = self.app.model.session.get_roi(self.app.model.session.data, cell_index).get_x_y_border_list()
-        #     # print 'A', time.time() - t0
-        #     # t0 = time.time()
-        #     df = pd.DataFrame({'x':x_list, 'y':y_list})
-        #     # print 'B', time.time() - t0
-        #     # t0 = time.time()
-        #     source = ColumnDataSource(data=df)
-        #     # print 'C', time.time() - t0
-        #     # t0 = time.time()
-        #     self.selected_cell_glyph_dict[cell_index] = self.figure.patch(x='x', y='y', source=source)
-        #     print 'D', time.time() - t0
-
-            # source = ColumnDataSource(data=self.app.model.session.get_roi(self.app.model.session.data, cell_index).df)
-            # self.selected_cell_glyph_dict[cell_index] = self.figure.quad(left='left', right='right', top='top', bottom='bottom', source=source)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # print type(tmp)
-        # sys.exit()
-
-        # q = Quad(left=1, right=2, bottom=3, top=4)
-        # q.on_change('fill_alpha', lambda x:x)
-        # x = TapTool()
-        # x.
-
-        # print 'tmp', type(tmp)
-
-        # print self.center, df['left'].min(), df['right'].max(), df['bottom'].min(), df['top'].max()
-
-
-
-
-    # def set_roi(self, cell_index):
-    #
-    #     try:
-    #         self.curr_roi.visible = False
-    #     except:
-    #         pass
-    #
-    #     if not cell_index in self.roi_glyph_dict:
-    #         source = ColumnDataSource(data=self.session.get_roi(self.session.data, cell_index).df)
-    #         self.roi_glyph_dict[cell_index] = self.figure.quad(left='left', right='right', top='top', bottom='bottom', source=source, visible=True)
-    #
-    #     self.curr_roi = self.roi_glyph_dict[cell_index]
-    #     self.curr_roi.visible = True
-
-
-
-
-
-
-# self.roi_glyph_dict[cell_index].nonselected_glyph = None
-# self.roi_glyph_dict[cell_index].select(type=TapTool)
-# taptool = fcm.figure.select(type=TapTool)
-# taptool.callback()
-
-        #
-        # def tmp(args):
-        #     print args
-
-        # self.figure.on_click(tmp)
-    #     args = {'source':active_cell_manager.source}
-    #     taptool.callback = CustomJS(args=args, code='''
-    #     var data=source.data
-    #
-    #
-    #     ''')
 
 
 
