@@ -124,7 +124,7 @@ class DataBrowser(object):
 
         # p2 = figure(plot_width=20*16, plot_height=20*16)
         # p2.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=3, color="navy", alpha=0.5)
-        tab1 = Panel(child=self.cell_mask_widget.figure, title="mask")
+        tab1 = Panel(child=Column(self.cell_mask_widget.figure, WidgetBox(self.cell_slider.slider)), title="mask")
         tab2 = Panel(child=p2, title="line")
 
         tabs = Tabs(tabs=[tab1, tab2])
@@ -135,7 +135,8 @@ class DataBrowser(object):
         #                # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
         #                ])#, sizing_mode='stretch_both')
 
-        mask_stimulus_row = Row(Column(tabs, WidgetBox(self.cell_slider.slider)), Column(Spacer(height=60),self.stimulus_widget.figure))
+        mask_stimulus_row = Row(tabs, Column(Spacer(height=60),self.stimulus_widget.figure))
+        # mask_stimulus_row = Row(Column(tabs, WidgetBox(self.cell_slider.slider)), Column(Spacer(height=60),self.stimulus_widget.figure))
         return layout([
                         [self.time_index_slider.slider],
                         [self.session_navigation_widget.figure],
