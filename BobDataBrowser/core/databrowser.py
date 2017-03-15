@@ -113,6 +113,11 @@ class DataBrowser(object):
         tab2 = Panel(child=self.cell_table_widget.figure, title="line")
         tabs = Tabs(tabs=[tab1, tab2])
 
+        callback = CustomJS(args=dict(dt=self.cell_table_widget.figure), code="""
+                dt.trigger('change');
+            """)
+        tabs.js_on_change('active', callback)
+
         mask_stimulus_row = Row(tabs, Column(Spacer(height=60),self.stimulus_widget.figure))
 
         return layout([

@@ -22,9 +22,5 @@ class CellTableWidget(object):
 
     def initialize(self):
 
-        callback = CustomJS(args=dict(dt=self.figure), code="""
-                dt.trigger('change');
-            """)
-
-        self.app.model.csid_column_data_source.js_on_change('change', callback)
+        pass
 
