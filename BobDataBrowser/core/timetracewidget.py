@@ -11,10 +11,16 @@ from bokeh.models import CustomJS, ColumnDataSource, Slider, Span, PanTool, Cros
 class TimeTraceWidget(object):
 
     def __init__(self, app):
+        self.app = app
 
         ct = CrosshairTool(dimensions='height')
-        self.app = app
-        self.figure = Figure(plot_height=int(.3*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'ywheel_zoom','xpan','box_zoom', 'save', 'reset', 'tap', ct], active_drag='xpan', active_scroll='xwheel_zoom')
+        # callback = CustomJS(code="""
+        #     document.getElementsByName("cell_slider")[0].focus();
+        #     """)
+        tt = TapTool()
+        bzt = BoxZoomTool(dimensions='width')
+
+        self.figure = Figure(plot_height=int(.35*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'ywheel_zoom','xpan',bzt, 'save', 'reset', tt, ct], active_drag='xpan', active_scroll='xwheel_zoom')
         self.figure.toolbar.logo = None
         self.trace_dict = {}
 
@@ -52,9 +58,11 @@ class TimeTraceWidget(object):
         self.figure.x_range.on_change('end', end_change)
 
         def echo(attr, old, new):
-            print attr, old, new
             self.app.active_time_index_manager.set_active_time_index(int(new[0]['x']))
+
         self.figure.tool_events.on_change('geometries', echo)
+
+
 
     def set_scrubber_bar_location(self, active_time_index_manager):
         self.scrubber_bar.location = active_time_index_manager.active_time_index

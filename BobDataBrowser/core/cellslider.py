@@ -14,9 +14,8 @@ class CellSlider(object):
                              width=20 * 16,
                              title="Cell",
                              value=0,
-                             callback_policy='mouseup')
-
-
+                             callback_policy='mouseup',
+                             name='cell_slider')
 
     def initialize(self):
 
