@@ -19,7 +19,7 @@ class StimulusWidget(object):
 
         self.app = app
 
-        default_settings = {'x_range':[0, 28], 'y_range':[0, 16], 'plot_height':20*16, 'plot_width':20*28,
+        default_settings = {'x_range':[0, 28], 'y_range':[0, 16], 'plot_height':15*16, 'plot_width':15*28,
                             'tools':['box_zoom', 'wheel_zoom', 'save', 'reset']}
         self.figure = Figure(**default_settings)
         turn_off_axes_labels(self.figure)

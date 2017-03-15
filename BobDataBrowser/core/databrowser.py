@@ -15,10 +15,15 @@ from BobDataBrowser.core.utilities import turn_off_axes_labels
 from BobDataBrowser.core.timerangemanager import TimeRangeManager
 from BobDataBrowser.core.sessionnavigationwidget import SessionNavigationWidget
 from bokeh.layouts import widgetbox, layout
+from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
 import sys
 import time
+from bokeh.models.widgets import Panel, Tabs
+from bokeh.io import output_file, show
+from bokeh.plotting import figure
 import pandas as pd
 from bokeh.io import curdoc
+from bokeh.models.widgets import Tabs
 
 class Model(object):
 
@@ -104,11 +109,30 @@ class DataBrowser(object):
 
     def get_layout(self):
 
+        columns = [
+                    TableColumn(field='csid', title='csid'),
+                    TableColumn(field='cell_index', title='cell_index'),
+                    TableColumn(field='size', title='size')
+                  ]
+
+
+        p2 = DataTable(source=self.model.csid_column_data_source,
+                       columns=columns,
+                       width=20*16, height=20*16,
+                       sortable=True)
+
+        # p2 = figure(plot_width=20*16, plot_height=20*16)
+        # p2.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=3, color="navy", alpha=0.5)
+        tab1 = Panel(child=self.cell_mask_widget.figure, title="mask")
+        tab2 = Panel(child=p2, title="line")
+
+        tabs = Tabs(tabs=[tab1, tab2])
+
         return layout([[self.time_index_slider.slider],
                        [self.session_navigation_widget.figure],
-
                        [self.time_trace_widget.figure],
-                       [self.cell_mask_widget.figure, self.stimulus_widget.figure],
+                       [tabs, self.stimulus_widget.figure],
+                       # [self.cell_mask_widget.figure, self.stimulus_widget.figure],
                        [self.cell_slider.slider]])
 
 
