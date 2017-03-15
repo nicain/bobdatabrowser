@@ -25,11 +25,12 @@ class CellMaskWidget(object):
         self.width = int(self.app.stimulus_widget.width*1./self.app.stimulus_widget.aspect_ratio)
         self.height = self.width
         default_settings = {'x_range': [0, 512], 'y_range': [0, 512], 'plot_height': self.height, 'plot_width': self.width,
-                            'tools': ['pan','tap',BoxZoomTool(match_aspect=True),'box_select','crosshair','resize',ResetTool(reset_size=True), 'save',default_hovertool]}
+                            'tools': ['pan','tap','box_zoom','crosshair',ResetTool(reset_size=True), 'save',default_hovertool], 'active_drag':'box_zoom'}
         self.figure = Figure(toolbar_location='left', **default_settings)
         turn_off_axes_labels(self.figure)
         self.figure.toolbar.logo = None
-
+        bzt = self.figure.select(type=BoxZoomTool)
+        bzt.match_aspect=True
         self.figure.x_range.bounds = (0,512)
         self.figure.y_range.bounds = (0, 512)
 
