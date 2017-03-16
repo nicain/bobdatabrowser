@@ -20,7 +20,7 @@ class TimeTraceWidget(object):
         tt = TapTool()
         # bzt = BoxZoomTool(dimensions='width')
 
-        self.figure = Figure(plot_height=int(.35*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'ywheel_zoom','xpan','box_zoom', 'save', 'reset', tt, ct], active_drag='box_zoom', active_scroll='xwheel_zoom')
+        self.figure = Figure(plot_height=int(.35*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'xwheel_pan', 'ywheel_zoom','xpan','box_zoom', 'save', 'reset', tt, ct], active_drag='box_zoom', active_scroll='xwheel_pan')
         self.figure.toolbar.logo = None
         self.trace_dict = {}
         bzt = self.figure.select(type=BoxZoomTool)
@@ -40,11 +40,11 @@ class TimeTraceWidget(object):
 
             self.app.time_index_slider.slider.start = int(new)
             delta = self.app.time_index_slider.slider.end - self.app.time_index_slider.slider.start
-            self.app.time_index_slider.slider.step = max(int(1.*delta/300),1)
+            self.app.time_index_slider.slider.step = max(int(1.*delta/2500),1)
 
-            if new > self.scrubber_bar.location:
-                new_location = self.figure.x_range.start + .01 * (self.figure.x_range.end - self.figure.x_range.start)
-                self.app.active_time_index_manager.set_active_time_index(int(new_location))
+            # if new > self.scrubber_bar.location:
+            #     new_location = self.figure.x_range.start + .01 * (self.figure.x_range.end - self.figure.x_range.start)
+            #     self.app.active_time_index_manager.set_active_time_index(int(new_location))
 
         self.figure.x_range.on_change('start', start_change)
 
@@ -54,9 +54,9 @@ class TimeTraceWidget(object):
             delta = self.app.time_index_slider.slider.end - self.app.time_index_slider.slider.start
             self.app.time_index_slider.slider.step = max(int(1. * delta / 300), 1)
 
-            if new < self.scrubber_bar.location:
-                new_location = self.figure.x_range.end - .01 * (self.figure.x_range.end - self.figure.x_range.start)
-                self.app.active_time_index_manager.set_active_time_index(int(new_location))
+            # if new < self.scrubber_bar.location:
+            #     new_location = self.figure.x_range.end - .01 * (self.figure.x_range.end - self.figure.x_range.start)
+            #     self.app.active_time_index_manager.set_active_time_index(int(new_location))
         self.figure.x_range.on_change('end', end_change)
 
         def echo(attr, old, new):

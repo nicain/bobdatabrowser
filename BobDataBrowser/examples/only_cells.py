@@ -40,7 +40,8 @@ from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
 
 from BobDataBrowser.core.databrowser import DataBrowser
 # oeid = 530646083
-oeid = 510536157
+# oeid = 510536157
+oeid = 501254258
 model = DataBrowser(oeid)
 
 
