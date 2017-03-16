@@ -59,13 +59,14 @@ class SessionNavigationWidget(object):
 
         self.stimulus_epoch_renderer_fg = self.figure.quad(
             alpha = 0,
-            selection_fill_alpha=.5,
+            selection_fill_alpha=0,
             nonselection_fill_alpha=0,
             line_alpha=0,
-            selection_line_alpha=.5,
+            selection_line_alpha=1,
             nonselection_line_alpha=0,
             name='foreground',
-            selection_color='navy',
+            selection_color='firebrick',
+            line_width = 3,
             **D)
 
         taptool = self.figure.select(type=TapTool)
