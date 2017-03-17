@@ -75,6 +75,12 @@ class SessionNavigationWidget(object):
         self.scrubber_bar = Span(location=0, dimension='height', line_color='red', line_dash='dashed', line_width=1, name='scrubber')
         self.figure.add_layout(self.scrubber_bar)
 
+        callback = CustomJS(args=dict(source=self.app.time_index_slider.slider), code="""
+            document.getElementById(source.id).parentNode.getElementsByClassName('bk-slider-horizontal')[0].getElementsByClassName("bk-ui-slider-handle")[0].focus()
+            """)
+        self.figure.tool_events.js_on_change('geometries', callback)
+
+
         def echo(attr, old, new):
             # print attr, old, new
             self.app.active_time_index_manager.set_active_time_index(int(new[0]['x']))

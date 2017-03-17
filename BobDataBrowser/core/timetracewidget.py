@@ -14,11 +14,7 @@ class TimeTraceWidget(object):
         self.app = app
 
         ct = CrosshairTool(dimensions='height')
-        # callback = CustomJS(code="""
-        #     document.getElementsByName("cell_slider")[0].focus();
-        #     """)
         tt = TapTool()
-        # bzt = BoxZoomTool(dimensions='width')
 
         self.figure = Figure(plot_height=int(.35*self.app.width), plot_width=self.app.width, webgl=True, tools=['xwheel_zoom', 'xwheel_pan', 'ywheel_zoom','xpan','box_zoom', 'save', 'reset', tt, ct], active_drag='box_zoom', active_scroll='xwheel_pan')
         self.figure.toolbar.logo = None
@@ -63,6 +59,12 @@ class TimeTraceWidget(object):
             self.app.active_time_index_manager.set_active_time_index(int(new[0]['x']))
 
         self.figure.tool_events.on_change('geometries', echo)
+
+        callback = CustomJS(args=dict(source=self.app.time_index_slider.slider), code="""
+            document.getElementById(source.id).parentNode.getElementsByClassName('bk-slider-horizontal')[0].getElementsByClassName("bk-ui-slider-handle")[0].focus()
+            """)
+        self.figure.tool_events.js_on_change('geometries', callback)
+
 
         def callback(attr, old, new):
             cell_index = new['1d']['indices'][0]
