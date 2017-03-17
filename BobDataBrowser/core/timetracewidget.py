@@ -66,6 +66,27 @@ class TimeTraceWidget(object):
         self.figure.tool_events.js_on_change('geometries', callback)
 
 
+
+
+        resettool = self.figure.select(type=ResetTool)[0]
+        otherresettool = self.app.session_navigation_widget.figure.select(type=ResetTool)[0]
+        callback = CustomJS(args=dict(source=resettool, target=otherresettool), code="""
+            console.log('HELLO')
+            console.log(source)
+            console.log(source.id)
+            console.log(target)
+            console.log(target.id)
+            console.log('WORLD')
+            target.trigger('do')
+            console.log('Done')
+            """)
+        resettool.js_on_change('do', callback)
+
+
+
+
+
+
         def callback(attr, old, new):
             cell_index = new['1d']['indices'][0]
 
