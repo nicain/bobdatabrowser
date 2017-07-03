@@ -28,10 +28,13 @@ class SessionNavigationWidget(object):
 
     def initialize(self):
 
+        print self.app.model.stimulus.interval_df
+
         D = collections.defaultdict(list)
         for _, row in self.app.model.stimulus.interval_df.iterrows():
-            left = int(row.interval[1:-1].split(', ')[0])
-            right = int(row.interval[1:-1].split(', ')[1])
+            # print row.interval, , row.interval[1]
+            left = row.interval[0]#int(row.interval[1:-1].split(', ')[0])
+            right = row.interval[1]#int(row.interval[1:-1].split(', ')[1])
             D['left'].append(left)
             D['right'].append(right)
             D['bottom'].append(0)
@@ -50,8 +53,8 @@ class SessionNavigationWidget(object):
 
         D = collections.defaultdict(list)
         for _, row in self.app.model.stimulus.interval_df.iterrows():
-            left = int(row.interval[1:-1].split(', ')[0])
-            right = int(row.interval[1:-1].split(', ')[1])
+            left = row.interval[0]#int(row.interval[1:-1].split(', ')[0])
+            right = row.interval[1]#int(row.interval[1:-1].split(', ')[1])
             D['left'].append(left)
             D['right'].append(right)
             D['bottom'].append(0)
